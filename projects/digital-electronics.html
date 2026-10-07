@@ -31,8 +31,8 @@
       <div class="links"><a href="https://github.com/ahmedg-stack/digital-electronics">Repo</a></div>
 
       <h2>Random number generator</h2>
-      <p class="meta">555 clock → 3-bit counter → decode logic → LED die · simulated, then soldered</p>
-      <p>An LM555 astable clock (R1 = 10 kΩ, R2 = 18 kΩ; I measured a period of about 15 ms) drives a 3-bit counter built from 74LS74 D flip-flops. Set/reset logic limits the count to 1–6. AND, OR, and NOT gates decode the count into an LED die face; the LEDs are driven through the logic, not wired straight to the clock. A user switch disturbs the clock timing, so when it stops depends on the person, not the circuit.<!-- TODO: confirm LED count (description: 6; notebook truth table: 7) --></p>
+      <p class="meta">555 clock → 3-bit counter → decode logic → 7-LED die · simulated, then soldered</p>
+      <p>An LM555 astable clock (R1 = 10 kΩ, R2 = 18 kΩ; I measured a period of about 15 ms) drives a 3-bit counter built from 74LS74 D flip-flops. Set/reset logic limits the count to 1–6. AND, OR, and NOT gates decode the count into a 7-LED die face; the LEDs are driven through the logic, not wired straight to the clock. A user switch disturbs the clock timing, so when it stops depends on the person, not the circuit.</p>
       <div class="grid-2">
 <figure><img src="../img/de/rng/555-clock.png" alt="555 astable clock schematic" width="348" height="489" loading="lazy" decoding="async"><figcaption>555 astable clock</figcaption></figure>
 <figure><img src="../img/de/rng/3bit-counter.jpg" alt="3-bit counter with set/reset logic" width="1261" height="747" loading="lazy" decoding="async"><figcaption>3-bit counter with set/reset logic</figcaption></figure>
@@ -85,11 +85,11 @@ Db = Qa'·Qb'·EN + Qa'·Qb·EN'</code></pre>
 <figure><img src="../img/de/fsm/schematic.png" alt="5-3-2 state machine Multisim schematic" width="1177" height="634" loading="lazy" decoding="async"></figure>
 
       <h2>Capstone: attachable distance sensor</h2>
-      <p class="meta">team of four · Raspberry Pi Pico 2 W · HC-SR04 · BLE</p>
+      <p class="meta">team project · Raspberry Pi Pico 2 W · HC-SR04 · BLE</p>
       <div class="grid-2">
         <div>
           <p>A short team project: a proximity alert for older cars without built-in sensors. A Pico 2 W reads an HC-SR04 ultrasonic sensor. When an object comes closer than a threshold, the Pico sounds a piezo buzzer, turns a servo 90°, and sends a BLE alert to a phone app. Closing the app silences the buzzer and resets the servo.</p>
-          <p><strong>Team:</strong> Pietro Moreira (code and app), Juan Salcedo (board assembly), Haran Sudalayandi, and me (soldering and the protective enclosure).</p>
+          <p><strong>Team:</strong> Pietro Moreira (code and app), Juan Salcedo (board assembly), and me (soldering and the protective enclosure).</p>
         </div>
 <figure><img src="../img/de/capstone/enclosure.jpg" alt="Distance sensor in its protective enclosure" width="900" height="1200" loading="lazy" decoding="async"><figcaption>Enclosure</figcaption></figure>
       </div>
