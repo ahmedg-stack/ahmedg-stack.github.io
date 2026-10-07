@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Orange Pi Router · Ahmed Gencer</title>
+  <meta name="description" content="In progress: custom router on an Orange Pi.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">Ahmed Gencer</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#projects">Projects</a>
+        <a href="../about.html">About</a>
+        <!-- TODO: add Resume link once the hardware resume exists:
+        <a href="../resume.pdf">Resume</a> -->
+        <a href="https://github.com/ahmedg-stack">GitHub</a>
+        <a href="https://www.linkedin.com/in/ahmedegencer/">LinkedIn</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <div class="wrap">
+      <p class="meta">Personal project · <span class="status">In progress</span></p>
+      <h1>Orange Pi Router</h1>
+      <p class="lede">A custom network router on an Orange Pi single-board computer. Research stage: nothing has been built or tested yet.</p>
+      <div class="links"><a href="https://github.com/ahmedg-stack/orange-pi-router">Repo</a></div>
+
+      <h2>Goals</h2>
+      <ul>
+        <li>Route between a WAN port and a LAN port using two Ethernet interfaces.</li>
+        <li>Run NAT, DHCP, DNS, and a firewall myself.</li>
+        <li>Learn Linux networking on real hardware.</li>
+      </ul>
+
+      <h2>Planned architecture</h2>
+<pre><code>Internet (modem) ──WAN──▶ [ Orange Pi ] ──LAN──▶ switch / devices
+                           ├─ routing + NAT
+                           ├─ DHCP
+                           ├─ DNS
+                           └─ firewall</code></pre>
+
+      <h2>Roadmap</h2>
+      <ul>
+        <li>✅ Research hardware, dual-Ethernet options, and operating systems</li>
+        <li>⬜ Choose board and second Ethernet interface</li>
+        <li>⬜ Install OS; bring up WAN and LAN</li>
+        <li>⬜ Routing, NAT, DHCP, DNS, firewall</li>
+        <li>⬜ Throughput and latency testing</li>
+      </ul>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>Ahmed Gencer · Texas A&amp;M University</span>
+      <span><a href="mailto:ahmedg@tamu.edu">ahmedg@tamu.edu</a> · <a href="https://github.com/ahmedg-stack">GitHub</a> · <a href="https://www.linkedin.com/in/ahmedegencer/">LinkedIn</a></span>
+    </div>
+  </footer>
+</body>
+</html>

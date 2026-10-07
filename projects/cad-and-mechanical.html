@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CAD &amp; Mechanical · Ahmed Gencer</title>
+  <meta name="description" content="Fusion 360 parts and assemblies, truss analysis, compound machine.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">Ahmed Gencer</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#projects">Projects</a>
+        <a href="../about.html">About</a>
+        <!-- TODO: add Resume link once the hardware resume exists:
+        <a href="../resume.pdf">Resume</a> -->
+        <a href="https://github.com/ahmedg-stack">GitHub</a>
+        <a href="https://www.linkedin.com/in/ahmedegencer/">LinkedIn</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <div class="wrap">
+      <p class="meta">PLTW IED 2023–24 · PLTW POE 2024–25</p>
+      <h1>CAD &amp; Mechanical</h1>
+      <p class="lede">Fusion 360 parts, drawings, and assemblies from Introduction to Engineering Design, plus statics and mechanism builds from Principles of Engineering.</p>
+      <ul class="tags"><li>Fusion 360</li><li>engineering drawings</li><li>motion study</li><li>MDSolids</li><li>statics</li></ul>
+      <div class="links"><a href="https://github.com/ahmedg-stack/cad-and-mechanical">Repo</a></div>
+
+      <h2>Automata</h2>
+      <p>A box with four cams (pear, snail, eccentric, regular hexagon) on one axle. Turning the handle lifts each follower at a different time. I modeled every part, assembled them with joints, and animated the mechanism in Fusion 360 to check that each cam drove its follower.</p>
+<figure><img src="../img/cad/automata/full-box-assembly.png" alt="Automata exploded assembly drawing with parts list" width="2000" height="1545" loading="lazy" decoding="async"><figcaption>Full box assembly with parts list (scale 1:2).</figcaption></figure>
+
+      <h2>Puzzle cube</h2>
+      <p>Five pieces, each with at least 4 unit blocks, that fill a 3×3×3 cube and hold together but pull apart easily. I modeled each piece by treating the remaining empty space as the next piece's shape, checked the fit in Fusion 360, then built it from 1" wooden blocks.</p>
+<figure><img src="../img/cad/puzzle/assembly.png" alt="Puzzle cube assembly drawing" width="1600" height="1035" loading="lazy" decoding="async"><figcaption>Assembly drawing with parts list.</figcaption></figure>
+
+      <h2>Iso-shapes and pen reverse engineering</h2>
+      <p>Three parts modeled exactly from dimensioned prints, each built from 2–3 simpler shapes. Separately, I took apart an unbranded pen, measured each part, and rebuilt it in Fusion 360.</p>
+      <div class="grid-2">
+<figure><img src="../img/cad/iso/part-1.png" alt="Iso-shape part drawing" width="1600" height="1035" loading="lazy" decoding="async"><figcaption>Iso-shape part 1</figcaption></figure>
+<figure><img src="../img/cad/pen/pen-drawing.png" alt="Pen drawing" width="1600" height="1035" loading="lazy" decoding="async"><figcaption>Reverse-engineered pen</figcaption></figure>
+      </div>
+
+      <h2>Truss</h2>
+      <p>A statically determinate popsicle-stick truss. I solved the member forces by hand, checked them in MDSolids, then loaded the truss to failure.</p>
+      <div class="table-wrap"><table>
+        <tr><th>Max load</th><th>Mass</th><th>Efficiency</th><th>Predicted failure</th><th>Actual failure</th></tr>
+        <tr><td>60 lb</td><td>3.96 g</td><td>15.15</td><td>Members AD, AB</td><td>Right-side members</td></tr>
+      </table></div>
+      <p>The failure point didn't match the analysis. I traced it to my gusset plates and cuts, not the design. Next time: cleaner cuts and better gussets.</p>
+      <div class="grid-2">
+<figure><img src="../img/cad/truss/load-curve.jpg" alt="Load vs displacement curve" width="924" height="637" loading="lazy" decoding="async"><figcaption>Load vs. displacement</figcaption></figure>
+<figure><img src="../img/cad/truss/mdsolids.jpg" alt="MDSolids member forces" width="1600" height="1159" loading="lazy" decoding="async"><figcaption>MDSolids solution</figcaption></figure>
+      </div>
+
+      <h2>Compound machine</h2>
+      <p>A team of four combined at least five simple machines (lever, gear train, screw, inclined plane, wheel and axle) to lift 1 kg by 5 inches with a mechanical advantage between 5 and 15. I helped build most of the machine and kept communication going across the team.</p>
+<figure><img src="../img/cad/compound/compound-machine.jpg" alt="Compound machine build" width="721" height="542" loading="lazy" decoding="async"></figure>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>Ahmed Gencer · Texas A&amp;M University</span>
+      <span><a href="mailto:ahmedg@tamu.edu">ahmedg@tamu.edu</a> · <a href="https://github.com/ahmedg-stack">GitHub</a> · <a href="https://www.linkedin.com/in/ahmedegencer/">LinkedIn</a></span>
+    </div>
+  </footer>
+</body>
+</html>

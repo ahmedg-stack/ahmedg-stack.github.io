@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AGV Machine Control · Ahmed Gencer</title>
+  <meta name="description" content="Color-sorting automated guided vehicle: control logic, pseudocode, flowchart.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">Ahmed Gencer</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#projects">Projects</a>
+        <a href="../about.html">About</a>
+        <!-- TODO: add Resume link once the hardware resume exists:
+        <a href="../resume.pdf">Resume</a> -->
+        <a href="https://github.com/ahmedg-stack">GitHub</a>
+        <a href="https://www.linkedin.com/in/ahmedegencer/">LinkedIn</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <div class="wrap">
+      <p class="meta">PLTW Principles of Engineering · 2024–25 · team project</p>
+      <h1>AGV Machine Control</h1>
+      <p class="lede">An automated guided vehicle that picks up a box, identifies its color, delivers red boxes to one side and green to the other, and returns to its starting point. My role: <strong>Control Logic Engineer</strong>.</p>
+      <div class="links"><a href="https://github.com/ahmedg-stack/agv-machine-control">Repo</a></div>
+
+      <h2>Control logic</h2>
+      <div class="grid-2">
+        <div>
+<pre><code>when turned on:
+  loop:
+    if box detected:
+      pick up box
+      if red:   drive to right drop-off
+      if green: drive to left drop-off
+      drop off box
+      drive back to pickup site</code></pre>
+          <p>I wrote the pseudocode and the program logic: sensing, the color branch, and the return path. The box had to be lifted, not dragged.</p>
+        </div>
+<figure><img src="../img/agv/flowchart.jpg" alt="Hand-drawn flowchart: pick up box, branch on color, drive to drop-off, drop, return" width="490" height="468" loading="lazy" decoding="async"><figcaption>Our team's flowchart</figcaption></figure>
+      </div>
+
+      <h2>Process</h2>
+      <ul>
+        <li><strong>Research:</strong> I studied five reference mechanisms (VEX pulley lift, delivery robots, warehouse robots, Roomba, pincer gripper) and how sensors control each one.</li>
+        <li><strong>Selection:</strong> each of us sketched designs, and we chose one with a points vote.</li>
+        <li><strong>Build:</strong> we split up the subsystems, combined them, redesigned several times, then programmed and tested repeatedly.</li>
+      </ul>
+
+      <h2>Limitations and next steps</h2>
+      <ul>
+        <li>Travel distances were hard-coded. Next time: sensor-driven movement that decides how far to drive and turn based on its surroundings.</li>
+        <li>A separate motor for each wheel for finer control; drop the redundant second lift motor.</li>
+        <li>Teamwork: assign each person a subsystem early, and collect ideas in a shared doc before discussing them.</li>
+      </ul>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>Ahmed Gencer · Texas A&amp;M University</span>
+      <span><a href="mailto:ahmedg@tamu.edu">ahmedg@tamu.edu</a> · <a href="https://github.com/ahmedg-stack">GitHub</a> · <a href="https://www.linkedin.com/in/ahmedegencer/">LinkedIn</a></span>
+    </div>
+  </footer>
+</body>
+</html>

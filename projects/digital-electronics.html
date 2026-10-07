@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Digital Electronics · Ahmed Gencer</title>
+  <meta name="description" content="Combinational and sequential logic designs in NI Multisim: RNG, majority vote, counters, timer, state machine.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">Ahmed Gencer</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#projects">Projects</a>
+        <a href="../about.html">About</a>
+        <!-- TODO: add Resume link once the hardware resume exists:
+        <a href="../resume.pdf">Resume</a> -->
+        <a href="https://github.com/ahmedg-stack">GitHub</a>
+        <a href="https://www.linkedin.com/in/ahmedegencer/">LinkedIn</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <div class="wrap">
+      <p class="meta">PLTW Digital Electronics · 2025–26 · individual projects</p>
+      <h1>Digital Electronics</h1>
+      <p class="lede">Combinational and sequential logic, each taken from problem statement to truth table, K-map and Boolean simplification, then a gate-level schematic in NI Multisim. Some were breadboarded or soldered.</p>
+      <ul class="tags"><li>NI Multisim</li><li>K-maps</li><li>555 timer</li><li>flip-flops</li><li>counters</li><li>FSM</li><li>soldering</li></ul>
+      <div class="links"><a href="https://github.com/ahmedg-stack/digital-electronics">Repo</a></div>
+
+      <h2>Random number generator</h2>
+      <p class="meta">555 clock → 3-bit counter → decode logic → LED die · simulated, then soldered</p>
+      <p>An LM555 astable clock (R1 = 10 kΩ, R2 = 18 kΩ; I measured a period of about 15 ms) drives a 3-bit counter built from 74LS74 D flip-flops. Set/reset logic limits the count to 1–6. AND, OR, and NOT gates decode the count into an LED die face; the LEDs are driven through the logic, not wired straight to the clock. A user switch disturbs the clock timing, so when it stops depends on the person, not the circuit.<!-- TODO: confirm LED count (description: 6; notebook truth table: 7) --></p>
+      <div class="grid-2">
+<figure><img src="../img/de/rng/555-clock.png" alt="555 astable clock schematic" width="348" height="489" loading="lazy" decoding="async"><figcaption>555 astable clock</figcaption></figure>
+<figure><img src="../img/de/rng/3bit-counter.jpg" alt="3-bit counter with set/reset logic" width="1261" height="747" loading="lazy" decoding="async"><figcaption>3-bit counter with set/reset logic</figcaption></figure>
+      </div>
+<figure><img src="../img/de/rng/timing-diagram.jpg" alt="Timing diagram for CLOCK, C, B, A" width="1107" height="320" loading="lazy" decoding="async"><figcaption>Counter timing diagram</figcaption></figure>
+      <div class="grid-2">
+<figure><img src="../img/de/rng/truth-table.jpg" alt="Truth table from count to LED outputs and die face" width="1238" height="804" loading="lazy" decoding="async"><figcaption>Truth table: count → LEDs → die face</figcaption></figure>
+<figure><img src="../img/de/rng/soldered-board.jpg" alt="Soldered RNG board" width="1400" height="1050" loading="lazy" decoding="async"><figcaption>Soldered board</figcaption></figure>
+      </div>
+<figure><video controls muted loop playsinline preload="none" poster="../media/rng-simulation-poster.jpg" width="1280" height="684"><source src="../media/rng-simulation.mp4" type="video/mp4"><a href="../media/rng-simulation.mp4">Download the video</a></video><figcaption>Multisim simulation with the oscilloscope on the clock output.</figcaption></figure>
+      <p><em>Takeaway:</em> next time I'd fully understand the 555 circuit before wiring; the logic didn't click for me until near the end.</p>
+
+      <h2>Majority vote</h2>
+      <p class="meta">4 inputs · 2-input gates only · AOI vs NAND vs NOR</p>
+      <p>A board of four (President, Vice-president, Secretary, Treasurer) votes. A majority passes the decision, and on a 2–2 tie the president's vote decides. From the 16-row truth table and a K-map:</p>
+<pre><code>D = PV + PS + PT + VST</code></pre>
+      <div class="table-wrap"><table>
+        <tr><th></th><th>Simplified AOI</th><th>NAND-only</th><th>NOR-only</th></tr>
+        <tr><td>Gates</td><td>8</td><td>11</td><td>16</td></tr>
+        <tr><td>ICs</td><td>3</td><td>3</td><td>4</td></tr>
+        <tr><td>Cost per circuit</td><td><strong>$2.90</strong></td><td>$3.41</td><td>$4.96</td></tr>
+        <tr><td>Max propagation delay</td><td><strong>0.4 ns</strong></td><td>0.6 ns</td><td>0.7 ns</td></tr>
+      </table></div>
+      <p>I chose the AOI version: cheapest and fastest.</p>
+      <div class="grid-2">
+<figure><img src="../img/de/majority/aoi-schematic.png" alt="AOI schematic" width="766" height="658" loading="lazy" decoding="async"><figcaption>Simplified AOI (selected)</figcaption></figure>
+<figure><img src="../img/de/majority/breadboard.jpg" alt="Breadboard prototype" width="1400" height="1050" loading="lazy" decoding="async"><figcaption>Breadboarded on the PLTW trainer</figcaption></figure>
+      </div>
+
+      <h2>Seven-segment decoder</h2>
+      <p class="meta">3 inputs (X, Y, Z) → common-cathode display · Multisim + TinkerCAD</p>
+      <p>Logic that shows a fixed multi-digit sequence on a seven-segment display, one character per input state (000–111), using 3-input gates only. I made a separate K-map for each of the 7 segments, reused logic where characters repeated, converted parts to NAND-only and NOR-only forms, and built segments with current-limiting resistors in TinkerCAD.</p>
+
+      <h2>"Now Serving" counter (00–30)</h2>
+      <p class="meta">74LS93 + D flip-flops · Next / Reset pushbuttons</p>
+      <p>A deli-counter display: <strong>Next</strong> advances the count by one, <strong>Reset</strong> returns it to 00, and the count stops at 30. A 74LS93 counts the ones digit; two D flip-flops handle the tens digit; gating logic resets the ones digit at 10 and blocks Next at 30. I debugged it by placing indicator lights on intermediate wires.</p>
+<figure><img src="../img/de/now-serving/schematic.png" alt="Now Serving Multisim schematic" width="1122" height="750" loading="lazy" decoding="async"></figure>
+
+      <h2>60-second timer</h2>
+      <p class="meta">mod-10 → mod-6 · 74LS163, 74LS76, 74LS48</p>
+      <p>Counts 00–59 and rolls over. A 74LS163 synchronous counter (mod-10) for the ones digit is cascaded into three 74LS76 JK flip-flops (mod-6) for the tens. Two 74LS48 BCD-to-seven-segment decoders drive the displays through 220 Ω resistors. Reset (R) holds the count at zero; Suspend (S) pauses it.</p>
+<figure><img src="../img/de/timer/schematic.png" alt="60-second timer Multisim schematic" width="1156" height="619" loading="lazy" decoding="async"></figure>
+
+      <h2>5-3-2 state machine</h2>
+      <p class="meta">synchronous FSM · 2× 74LS74 · 74LS11</p>
+      <p>Each press of a pushbutton (EN) advances the display through 5 → 3 → 2 and back to 5. Two D flip-flops hold the state. I derived the next-state logic from the state and excitation tables:</p>
+<pre><code>Da = Qa'·Qb·EN + Qa·Qb'·EN'
+Db = Qa'·Qb'·EN + Qa'·Qb·EN'</code></pre>
+      <p>Output gates decode the state into BCD outputs C3–C0 (weights 8/4/2/1).</p>
+<figure><img src="../img/de/fsm/schematic.png" alt="5-3-2 state machine Multisim schematic" width="1177" height="634" loading="lazy" decoding="async"></figure>
+
+      <h2>Capstone: attachable distance sensor</h2>
+      <p class="meta">team of four · Raspberry Pi Pico 2 W · HC-SR04 · BLE</p>
+      <div class="grid-2">
+        <div>
+          <p>A short team project: a proximity alert for older cars without built-in sensors. A Pico 2 W reads an HC-SR04 ultrasonic sensor. When an object comes closer than a threshold, the Pico sounds a piezo buzzer, turns a servo 90°, and sends a BLE alert to a phone app. Closing the app silences the buzzer and resets the servo.</p>
+          <p><strong>Team:</strong> Pietro Moreira (code and app), Juan Salcedo (board assembly), Haran Sudalayandi, and me (soldering and the protective enclosure).</p>
+        </div>
+<figure><img src="../img/de/capstone/enclosure.jpg" alt="Distance sensor in its protective enclosure" width="900" height="1200" loading="lazy" decoding="async"><figcaption>Enclosure</figcaption></figure>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>Ahmed Gencer · Texas A&amp;M University</span>
+      <span><a href="mailto:ahmedg@tamu.edu">ahmedg@tamu.edu</a> · <a href="https://github.com/ahmedg-stack">GitHub</a> · <a href="https://www.linkedin.com/in/ahmedegencer/">LinkedIn</a></span>
+    </div>
+  </footer>
+</body>
+</html>

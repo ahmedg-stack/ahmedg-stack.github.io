@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mobil-Eyes · Ahmed Gencer</title>
+  <meta name="description" content="Thermal + night-vision driver-assist attachment: Arduino UNO, AMG8833 over I2C, USB serial.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">Ahmed Gencer</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#projects">Projects</a>
+        <a href="../about.html">About</a>
+        <!-- TODO: add Resume link once the hardware resume exists:
+        <a href="../resume.pdf">Resume</a> -->
+        <a href="https://github.com/ahmedg-stack">GitHub</a>
+        <a href="https://www.linkedin.com/in/ahmedegencer/">LinkedIn</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <div class="wrap">
+      <p class="meta">EDD capstone · 2025–26 · 2-person team</p>
+      <h1>Mobil-Eyes</h1>
+      <p class="lede">A vehicle-mounted thermal + night-vision attachment that gives a driver a second view of the road in fog, rain, and darkness. It supplements the driver's eyes and does not replace them. Presented to engineers at Garver.</p>
+      <ul class="tags"><li>Arduino UNO R3</li><li>AMG8833</li><li>I²C</li><li>USB serial</li><li>Fusion 360</li><li>3D printing</li></ul>
+      <div class="links"><a href="https://github.com/ahmedg-stack/mobil-eyes">Repo</a><a href="https://github.com/ahmedg-stack/mobil-eyes/blob/main/firmware/EDD_FinalProject_Code/EDD_FinalProject_Code.ino">Firmware (.ino)</a></div>
+
+<figure><img src="../img/mobil-eyes/road-test.jpg" alt="Laptop on the dashboard showing the camera feed and thermal feed side by side" width="660" height="390" loading="lazy" decoding="async"><figcaption>Road test: camera feed and thermal map side by side on the in-cabin laptop.</figcaption></figure>
+<figure><video controls muted loop playsinline preload="none" poster="../media/mobil-eyes-demo-poster.jpg" width="940" height="458"><source src="../media/mobil-eyes-demo.mp4" type="video/mp4"><a href="../media/mobil-eyes-demo.mp4">Download the video</a></video><figcaption>A hand moves in front of the unit in a dark room. The night-vision feed shows it under IR light, and the thermal feed shows it as a heat signature at the same time.</figcaption></figure>
+
+      <h2>My role</h2>
+      <ul>
+        <li>Wrote the Arduino firmware that reads the AMG8833 over I²C and streams frames over USB serial.</li>
+        <li>Soldered the AMG8833 and wired the UNO, sensor, and camera into one USB path.</li>
+        <li>Built and mounted the housing and ran road tests with my teammate, Daksha Srinivasan.<!-- TODO: one line on Daksha's role --></li>
+      </ul>
+
+      <h2>System</h2>
+<figure><img src="../img/mobil-eyes/system-diagram.png" alt="System diagram: UNO, breadboard, thermal camera, and AA batteries plus the night-vision camera feed a USB-A to USB-C adapter, then a USB-C extension" width="932" height="403" loading="lazy" decoding="async"></figure>
+      <div class="table-wrap"><table>
+        <tr><th>Part</th><th>Purpose</th></tr>
+        <tr><td>Arduino UNO R3</td><td>Reads the thermal sensor, streams frames over serial</td></tr>
+        <tr><td>Adafruit AMG8833 8×8 thermal sensor</td><td>Heat-signature detection (64 px/frame, I²C)</td></tr>
+        <tr><td>Arducam 1080P USB night-vision camera</td><td>Visible + IR night vision</td></tr>
+        <tr><td>3D-printed PLA housing</td><td>Holds both cameras on one forward axis</td></tr>
+        <tr><td>USB-A→C adapter + USB-C extension</td><td>One cable from outside the car into the cabin</td></tr>
+        <tr><td>AA battery pack</td><td>Power inside the housing</td></tr>
+      </table></div>
+
+      <h2>How it works</h2>
+      <h3>Firmware (my code)</h3>
+      <ol>
+        <li>Opens serial at <code>115200</code> baud and starts the AMG8833. If the sensor doesn't respond, it prints a wiring hint and halts.</li>
+        <li>Each loop reads all 64 pixels in one I²C read and prints them as an 8×8 grid of °C values.</li>
+        <li>Ends each frame with a <code>---</code> line so the receiver can find frame boundaries.</li>
+        <li>Waits 50 ms before the next frame.</li>
+      </ol>
+<pre><code>void loop() {
+  amg.readPixels(pixels);                  // one I2C read, 64 floats
+  for (int i = 1; i &lt;= AMG88xx_PIXEL_ARRAY_SIZE; i++) {
+    Serial.print(pixels[i-1]);
+    Serial.print(", ");
+    if (i % 8 == 0) Serial.println();      // 8 values per row
+  }
+  Serial.println("---");                   // frame separator
+  delay(50);
+}</code></pre>
+      <h3>Display</h3>
+      <p>A browser-based web app parsed the serial stream, drew the thermal grid as a heat map next to the Arducam feed, and could switch between the two views. <strong>The web app was built with AI assistance, and its source was lost after the project</strong>, so it isn't published. The firmware and hardware integration are my work. The Arducam's day/night switching is the module's built-in preset, not code we wrote.</p>
+
+      <h2>Design decisions</h2>
+<figure><img src="../img/mobil-eyes/design-sketches.jpg" alt="Hand sketches of earlier concepts" width="272" height="423" loading="lazy" decoding="async"><figcaption>Early concept sketches.</figcaption></figure>
+      <ul>
+        <li><strong>Scope.</strong> We cut a rotating roof turret (motor lag, motion blur, weather wear), then an 8-camera perimeter array (too many feeds for one USB hub and one UNO), down to one forward-facing unit.</li>
+        <li><strong>Wi-Fi → wired USB.</strong> Streaming over Wi-Fi added about 2 s of lag, far too slow for a moving car. We ran a hardwired USB cable around the car frame into the cabin instead.</li>
+        <li><strong>Phone → laptop.</strong> Phones restrict external USB devices from sending input, as a security measure, so the phone connection wasn't reliable. We moved to a laptop, which also leaves room to integrate later with in-car systems like CarPlay or Android Auto.</li>
+        <li><strong>Mounting.</strong> We designed a clamp, but the tested unit was attached with industrial adhesive.</li>
+      </ul>
+      <div class="grid-3">
+<figure><img src="../img/mobil-eyes/cad-housing-front.png" alt="CAD housing with two camera openings" width="610" height="574" loading="lazy" decoding="async"><figcaption>Housing (Fusion 360)</figcaption></figure>
+<figure><img src="../img/mobil-eyes/cad-camera-mount.png" alt="CAD camera mount" width="673" height="651" loading="lazy" decoding="async"><figcaption>Camera mount</figcaption></figure>
+<figure><img src="../img/mobil-eyes/cad-clamp.png" alt="CAD clamp mount" width="743" height="676" loading="lazy" decoding="async"><figcaption>Clamp (designed, not used)</figcaption></figure>
+      </div>
+
+      <h2>Build</h2>
+      <div class="grid-3">
+<figure><img src="../img/mobil-eyes/prototype-built.jpg" alt="Finished housing" width="1000" height="685" loading="lazy" decoding="async"><figcaption>Finished unit</figcaption></figure>
+<figure><img src="../img/mobil-eyes/hardware-cover-off.jpg" alt="Housing with cover off" width="680" height="771" loading="lazy" decoding="async"><figcaption>Cover off: UNO, AA pack, night-vision module</figcaption></figure>
+<figure><img src="../img/mobil-eyes/internals-side.jpg" alt="Internal assembly, side view" width="1200" height="1091" loading="lazy" decoding="async"><figcaption>Internals, side view</figcaption></figure>
+      </div>
+      <ul>
+        <li>I overheated and destroyed the first AMG8833 while soldering. I replaced it and changed my technique (temperature and contact time).</li>
+        <li>Breadboard jumpers shook loose during test drives. We secured them with adhesive and tighter cable management.</li>
+      </ul>
+
+      <h2>Results</h2>
+      <ul>
+        <li>Reliable when stationary and at low speed. <strong>Above ~20 mph</strong> the display lagged behind the car's real position too much to use.</li>
+        <li>Worked: universal USB adapter, consistent camera response, usable night-vision images, and the display stayed up through testing.</li>
+        <li>Fell short: bulkier than planned; our budget limited camera range and precision.</li>
+      </ul>
+
+      <h2>Limitations</h2>
+      <div class="note">The AMG8833's rated detection range for a human is about 7 m. The demo proves the detection principle, not highway-distance detection.</div>
+      <ul>
+        <li>Latency above ~20 mph is still an open problem.</li>
+        <li>8×8 thermal resolution shows that something warm is there, not what it is.</li>
+        <li>Wired only, and the web-app source is lost.</li>
+      </ul>
+
+      <h2>Next steps</h2>
+      <ul>
+        <li>A faster processor (for example a Raspberry Pi or Jetson Nano) in place of the UNO.</li>
+        <li>A custom PCB instead of the breadboard.</li>
+        <li>A low-latency link; a higher-range thermal sensor; possibly LiDAR for distance.</li>
+      </ul>
+
+      <h2>Credits</h2>
+      <p>Teammate: <strong>Daksha Srinivasan</strong>. Mentors: Bryan Mueller (CompEdge), Dr. Sriram Chandrasekaran (Raytheon), Edgar Nunez (CTE Center). Thanks to Garver for the opportunity to present, and to our classmates for peer reviews.</p>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>Ahmed Gencer · Texas A&amp;M University</span>
+      <span><a href="mailto:ahmedg@tamu.edu">ahmedg@tamu.edu</a> · <a href="https://github.com/ahmedg-stack">GitHub</a> · <a href="https://www.linkedin.com/in/ahmedegencer/">LinkedIn</a></span>
+    </div>
+  </footer>
+</body>
+</html>
